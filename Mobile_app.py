@@ -1,9 +1,8 @@
 import pickle
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
-
+import plotly.express as px
 
 # 📌 Set page config
 st.set_page_config(
@@ -104,13 +103,14 @@ with col1:
             'Probability': probabilities * 100
         })
         
-        # 📌 Plot with Matplotlib instead of Plotly
-        fig, ax = plt.subplots()
-        ax.bar(prob_df['Price Range'], prob_df['Probability'], color='blue')
-        ax.set_xlabel("Price Range")
-        ax.set_ylabel("Probability (%)")
-        ax.set_title("Prediction Probabilities")
-        st.pyplot(fig)
+        fig = px.bar(prob_df, x='Price Range', y='Probability',
+                     title='Prediction Probabilities',
+                     labels={'Probability': 'Probability (%)'},
+                     color='Probability',
+                     color_continuous_scale='Viridis')
+        
+        fig.update_layout(showlegend=False)
+        st.plotly_chart(fig)
 
 # 📌 Add "About" Section in Sidebar
 st.sidebar.header("📌 About")
